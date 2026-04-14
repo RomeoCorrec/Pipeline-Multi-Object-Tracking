@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# MOT Pipeline
+data/
+results/*.csv
+results/*.txt
+output.mp4
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/

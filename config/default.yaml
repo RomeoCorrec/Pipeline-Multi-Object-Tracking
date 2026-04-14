@@ -1,0 +1,29 @@
+device: auto  # auto | cpu | cuda
+
+detector:
+  model_path: yolov8n.pt
+  conf_thresh: 0.25
+  iou_thresh: 0.45
+  classes: [0]  # 0 = person
+
+tracker:
+  conf_high: 0.6
+  conf_low: 0.1
+  iou_thresh_high: 0.3
+  iou_thresh_low: 0.5
+  max_lost_age: 30
+  min_hits: 2
+  reid_alpha: 0.8
+
+embedder:
+  type: mobilenetv2
+  dim: 512
+
+pipeline:
+  output_video: output.mp4
+  display: true
+  counter_csv: results/crossings.csv
+
+benchmark:
+  mot17_dir: data/MOT17
+  output_dir: results/

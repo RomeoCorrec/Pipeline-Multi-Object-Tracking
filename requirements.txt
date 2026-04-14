@@ -1,0 +1,11 @@
+ultralytics>=8.0
+opencv-python>=4.8
+torch>=2.0
+torchvision>=0.15
+scipy>=1.11
+numpy>=1.24
+pyyaml>=6.0
+tqdm>=4.65
+rich>=13.0
+trackeval @ git+https://github.com/JonathonLuiten/TrackEval.git
+pytest>=7.0

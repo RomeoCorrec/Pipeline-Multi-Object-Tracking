@@ -5,10 +5,8 @@ import cv2
 import numpy as np
 import yaml
 from .detector.base import BaseDetector
-from .detector.yolo_detector import YOLOv8Detector
 from .tracker.bytetrack import ByteTrack
 from .reid.base import BaseEmbedder
-from .reid.embedder import MobileNetV2Embedder
 from .counter import VirtualLineCounter
 from .visualizer import Visualizer
 
@@ -36,13 +34,21 @@ class MOTPipeline:
     ) -> None:
         device = _resolve_device(config.get("device", "auto"))
 
-        self.detector = detector or YOLOv8Detector(
-            {**config.get("detector", {}), "device": device}
-        )
+        if detector is not None:
+            self.detector = detector
+        else:
+            from .detector.yolo_detector import YOLOv8Detector
+            self.detector = YOLOv8Detector(
+                {**config.get("detector", {}), "device": device}
+            )
         self.tracker = tracker or ByteTrack(config.get("tracker", {}))
-        self.embedder = embedder or MobileNetV2Embedder(
-            {**config.get("embedder", {}), "device": device}
-        )
+        if embedder is not None:
+            self.embedder = embedder
+        else:
+            from .reid.embedder import MobileNetV2Embedder
+            self.embedder = MobileNetV2Embedder(
+                {**config.get("embedder", {}), "device": device}
+            )
         self.counter = counter
         self.visualizer = Visualizer()
         self.config = config

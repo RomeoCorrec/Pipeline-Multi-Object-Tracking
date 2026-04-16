@@ -4,7 +4,7 @@ Real-time Multi-Object Tracking pipeline: YOLOv8 detection · ByteTrack from scr
 
 ## Démonstration
 
-<video src="presentation_MOT.mp4" controls loop muted width="100%"></video>
+![Demo](docs/demo.gif)
 
 > Détection YOLOv8n · pistage ByteTrack · traînées de trajectoires · Re-ID MobileNetV2
 

@@ -25,5 +25,5 @@ pipeline:
   counter_csv: results/crossings.csv
 
 benchmark:
-  mot17_dir: data/MOT17
+  mot17_dir: data/MOT17/MOT17/train
   output_dir: results/

@@ -91,7 +91,9 @@ class MOT17Evaluator:
                     f"{x1:.2f},{y1:.2f},{w:.2f},{h:.2f},1,-1,-1,-1\n"
                 )
 
-        pred_path = self.output_dir / f"{seq_path.name}.txt"
+        tracker_dir = self.output_dir / "bytetrack"
+        tracker_dir.mkdir(parents=True, exist_ok=True)
+        pred_path = tracker_dir / f"{seq_path.name}.txt"
         pred_path.write_text("".join(pred_lines))
         fps = len(frames) / elapsed if elapsed > 0 else 0.0
 
@@ -102,6 +104,10 @@ class MOT17Evaluator:
 
     def _eval(self, seq_path: Path, pred_path: Path, seq_name: str) -> dict:
         try:
+            # trackeval uses np.float which was removed in NumPy 1.24
+            if not hasattr(np, "float"):
+                np.float = float  # type: ignore[attr-defined]
+
             import trackeval  # type: ignore
 
             eval_cfg = trackeval.Evaluator.get_default_eval_config()
@@ -112,10 +118,12 @@ class MOT17Evaluator:
             data_cfg.update({
                 "GT_FOLDER": str(seq_path.parent),
                 "TRACKERS_FOLDER": str(self.output_dir),
+                "TRACKERS_TO_EVAL": ["bytetrack"],
                 "SEQMAP_FILE": None,
                 "SEQ_INFO": {seq_name: None},
                 "OUTPUT_FOLDER": None,
                 "TRACKER_SUB_FOLDER": "",
+                "SKIP_SPLIT_FOL": True,
             })
 
             evaluator = trackeval.Evaluator(eval_cfg)
@@ -123,7 +131,7 @@ class MOT17Evaluator:
             metrics = [trackeval.metrics.CLEAR(), trackeval.metrics.Identity()]
             raw, _ = evaluator.evaluate(dataset, metrics)
 
-            seq_res = raw["MotChallenge2DBox"][seq_name]["pedestrian"]
+            seq_res = raw["MotChallenge2DBox"]["bytetrack"][seq_name]["pedestrian"]
             clear = seq_res["CLEAR"]
             ident = seq_res["Identity"]
             return {

@@ -211,6 +211,11 @@ data/
 results/*.csv
 results/*.txt
 output.mp4
+ped2.mp4
+pedestrian.mp4
+*.pt
+.claude/
+~$*
 __pycache__/
 *.pyc
 .pytest_cache/

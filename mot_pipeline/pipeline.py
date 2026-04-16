@@ -106,7 +106,8 @@ class MOTPipeline:
         valid_dets = []
         for d in high:
             x1, y1, x2, y2 = (int(v) for v in d.bbox)
-            crop = frame[max(0, y1):y2, max(0, x1):x2]
+            fh, fw = frame.shape[:2]
+            crop = frame[max(0, y1):min(y2, fh), max(0, x1):min(x2, fw)]
             if crop.size > 0:
                 crops.append(crop)
                 valid_dets.append(d)
